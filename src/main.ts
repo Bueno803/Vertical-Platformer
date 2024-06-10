@@ -16,7 +16,9 @@ const config: Types.Core.GameConfig = {
   backgroundColor: "#028af8",
   physics: {
     default: "arcade",
-    arcade: { debug: true },
+    arcade: { 
+      gravity: {x: 0,y: 1000},
+      debug: true },
   },
   scale: {
     mode: Phaser.Scale.FIT,
