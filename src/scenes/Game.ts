@@ -1,5 +1,5 @@
 import { Scene } from "phaser";
-import player from './../p1jump.png'
+import player from "./../p1jump.png";
 import Player from "../characters/player";
 
 export class Game extends Scene {
@@ -8,6 +8,7 @@ export class Game extends Scene {
   msg_text: Phaser.GameObjects.Text;
   player: Player;
   cursor: any;
+  playerRef: any;
 
   // player2: Player = new Player();
 
@@ -16,11 +17,11 @@ export class Game extends Scene {
   }
 
   preload() {
-    this.player = new Player(this.scene.get('Game'));
-    console.log('1');
-    this.load.image('playerSprite', player);
+    this.player = new Player(this.scene.get("Game"));
+    console.log("1");
+    this.load.image("playerSprite", player);
     // this.load.image('playerSprite', player)
-    console.log('2');
+    console.log("2");
   }
 
   create() {
@@ -35,8 +36,8 @@ export class Game extends Scene {
     // });
     // Total gravity is 150.
     // group.create(450, 300).setGravity(0, 300);
-    const playerRef = this.player.spawnPlayer();
-    playerRef.setCollideWorldBounds(true);
+    this.playerRef = this.player.spawnPlayer();
+    this.playerRef.setCollideWorldBounds(true);
     this.camera = this.cameras.main;
     this.camera.setBackgroundColor(0x00ff00);
 
@@ -63,10 +64,24 @@ export class Game extends Scene {
   handlePlayerInput() {
     // const body = this.paddleLeft.body
     if (this.cursor.left.isDown) {
-        console.log("Move left");
-        // body.setVelocityY(-100);
+      console.log("Move left");
+      // body.setVelocityY(-100);
+      // I want to increate the velocity incrementally as the key is held
+      // So that when it isn't held the velocity will decrement
+      // giving the effect of slowing down (Sliding effect)
+      // this.playerRef.setVelocityX(-200);
     } else if (this.cursor.right.isDown) {
-        console.log("move right");
+      this.player.velocityX = 20;
+      console.log(this.player.velocity.x);
+      this.playerRef.setVelocityX(this.player.velocity.x);
+    } else if (this.cursor.space.isDown) {
+      console.log("Space");
+      console.log(this.player.velocity);
+    } else {
+      this.player.velocityX = -10;
+      this.playerRef.setVelocityX(this.player.velocity.x);
+      // console.log(this.player.velocity);
+      // this.playerRef.setVelocityX(this.playerRef.velocity);
     }
-}
+  }
 }

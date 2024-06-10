@@ -1,35 +1,72 @@
 import Phaser, { Scene } from "phaser";
-import playerSprite from './../p1jump.png'
+import playerSprite from "./../p1jump.png";
 
 export default class Player {
   player: Phaser.GameObjects.Shape;
   sceneRef: Phaser.Scene;
-  position: {
+  _position: {
     x: number;
     y: number;
   };
-  velocity: {
-    x: number,
-    y: number
-  }
+  _velocity: {
+    x: number;
+    y: number;
+  } = {
+    x: 0,
+    y: 0,
+  };
 
   constructor(scene: Phaser.Scene) {
-    scene.load.image('playerSprite', playerSprite);
+    scene.load.image("playerSprite", playerSprite);
     this.sceneRef = scene;
 
     console.log("player constructor");
-    // this.position = {
-    //   x: 0,
-    //   y: 0,
-    // };
-    // this.velocity = {
-    //   x: 0,
-    //   y: 1
-    // };
+    this._position = {
+      x: 200,
+      y: 200,
+    };
+    this._velocity = {
+      x: 0,
+      y: 0,
+    };
   }
 
+  get position() {
+    return this._position;
+  }
+
+  set position(coordinance: any) {
+    this._position = {
+      x: coordinance.x,
+      y: coordinance.y,
+    };
+  }
+
+  get velocity() {
+    console.log("Get velocity");
+    return this._velocity;
+  }
+
+  set velocityY(y: number) {
+    this._velocity.y = y;
+  }
+
+  set velocityX(x: number) {
+    console.log("add: ", x);
+    if (this._velocity.x + x > -1 && this._velocity.x + x < 300) {
+      this._velocity.x += x;
+    }
+  }
+
+  updateVelocity(x?: number, y?: number) {}
+
   spawnPlayer() {
-    return this.sceneRef.physics.add.sprite(200,200, 'playerSprite');
+    console.log("spawn player");
+    return this.sceneRef.physics.add.sprite(
+      this._position.x,
+      this._position.y,
+      "playerSprite"
+    );
   }
 
   get posY() {
